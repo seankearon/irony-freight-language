@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>AST Tree Node</Title>
+			<Shortcut>ast</Shortcut>
+			<Description>A snippet for creating an AST node class.</Description>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>The name of the node</ToolTip>
+					<Default>MyAst</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+				<![CDATA[using System;
+using System.Text;
+using Irony.Compiler;
+
+namespace FreightLanguageCompiler.Nodes
+{
+	internal class $name$Node : AstNode, IJavascriptGenerator
+	{
+		
+		public $name$Node(AstNodeArgs args)
+			: base(args)
+		{
+		}
+
+		public void GenerateScript(StringBuilder builder)
+		{
+
+		}
+
+	}
+}
+$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>AST Tree Node Property</Title>
+			<Shortcut>astprop</Shortcut>
+			<Description>A getter property for a child node.</Description>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>The name of the property</ToolTip>
+					<Default>Child</Default>
+				</Literal>
+				<Literal>
+					<ID>index</ID>
+					<ToolTip>The index of the child in the ChildNodes property</ToolTip>
+					<Default>0</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+				<![CDATA[		private $name$Node $name$
+		{
+			get
+			{
+				return ($name$Node)ChildNodes[$index$];
+			}
+		}$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>	
+</CodeSnippets>
+

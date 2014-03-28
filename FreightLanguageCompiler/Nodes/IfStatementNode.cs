@@ -1,17 +1,26 @@
-﻿using System;
-using System.Text;
-using Irony.Compiler;
+﻿using System.Text;
+using Irony.Ast;
+using Irony.Interpreter.Ast;
+using Irony.Parsing;
 
 namespace FreightLanguageCompiler.Nodes
 {
-	internal class IfStatementNode : AstNode, IJavascriptGenerator
+    public class IfStatementNode : AstNode, IJavascriptGenerator
 	{
+        public override void Init(AstContext context, ParseTreeNode treeNode)
+        {
+            base.Init(context, treeNode);
+            TreeNode = treeNode;
+        }
+
+        private ParseTreeNode TreeNode { get; set; }
+
 
 		private ExpressionNode Condition
 		{
 			get
 			{
-				return (ExpressionNode)ChildNodes[1];
+				return (ExpressionNode)TreeNode.ChildNodes[1].AstNode;
 			}
 		}
 
@@ -19,13 +28,8 @@ namespace FreightLanguageCompiler.Nodes
 		{
 			get
 			{
-				return (StatementListNode)ChildNodes[2];
+				return (StatementListNode)TreeNode.ChildNodes[2].AstNode;
 			}
-		}
-
-		public IfStatementNode(AstNodeArgs args)
-			: base(args)
-		{
 		}
 
 		public void GenerateScript(StringBuilder builder)

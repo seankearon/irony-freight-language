@@ -29,8 +29,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ExampleSite", "ExampleSite\
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "1045"
+		SlnRelativePath = "ExampleSite\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewExampleSite", "NewExampleSite\NewExampleSite.csproj", "{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +65,16 @@ Global
 		{DABBEFE4-BE19-4BB7-9783-54360FEEEB2B}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{DABBEFE4-BE19-4BB7-9783-54360FEEEB2B}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{DABBEFE4-BE19-4BB7-9783-54360FEEEB2B}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Release|.NET.ActiveCfg = Release|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B2E2C73C-260C-4EF0-BCE3-63BCAB316B2B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

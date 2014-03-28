@@ -1,31 +1,36 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
-using Irony.Compiler;
+using Irony.Ast;
+using Irony.Interpreter.Ast;
+using Irony.Parsing;
 
 namespace FreightLanguageCompiler.Nodes
 {
-	internal class ExpressionNode : AstNode, IJavascriptGenerator
+    public class ExpressionNode : AstNode, IJavascriptGenerator
 	{
+        public override void Init(AstContext context, ParseTreeNode treeNode)
+        {
+            base.Init(context, treeNode);
+            TreeNode = treeNode;
+        }
 
-		public ExpressionNode(AstNodeArgs args)
-			: base(args)
-		{
-		}
+        private ParseTreeNode TreeNode { get; set; }
 
-		public void GenerateScript(StringBuilder builder)
+	    public void GenerateScript(StringBuilder builder)
 		{
 			// different expression types have different number of children
-			foreach (var child in ChildNodes)
+            foreach (ParseTreeNode child in TreeNode.ChildNodes)
 			{
 
-				IJavascriptGenerator jsChild = child as IJavascriptGenerator;
+				var jsChild = child.AstNode as IJavascriptGenerator;
 				if (jsChild != null)
 				{
 					jsChild.GenerateScript(builder);
 				}
 				else
 				{
-					Token token = child as Token;
+					Token token = child.Token;
 					if (token != null)
 					{
 						// Just send the text that the user entered straight to javascript.

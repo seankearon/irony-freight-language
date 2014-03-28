@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Irony.Compiler;
-using FreightLanguageCompiler.Nodes;
+﻿using FreightLanguageCompiler.Nodes;
+using Irony.Ast;
+using Irony.Interpreter;
+using Irony.Parsing;
+using StatementListNode = FreightLanguageCompiler.Nodes.StatementListNode;
 
 namespace FreightLanguageCompiler
 {
-	public class FLGrammar : Grammar
+    /// <summary>
+    /// Reasons for using <see cref="InterpretedLanguageGrammar"/> as the base here: 
+    /// https://irony.codeplex.com/discussions/361018
+    /// Sean Kearon, March 2014
+    /// </summary>
+	public class FLGrammar : InterpretedLanguageGrammar
 	{
 
-		public FLGrammar()
+        public FLGrammar()
+            : base(false) // turn off case sensitivity
 		{
 
 			#region Initial setup of the grammar
-
-			// turn off case sensitivity
-			this.CaseSensitive = false;
 
 			// define all the non-terminals
 			var program = new NonTerminal("program", typeof(ProgramNode));
@@ -31,13 +33,20 @@ namespace FreightLanguageCompiler
 
 			// define all the terminals
 			var variable = new IdentifierTerminal("variable");
-			variable.AddKeywords("set", "to", "if", "freight", "cost", "is", "loop", "through", "order");
-			var number = new NumberLiteral("number");
-			var stringLiteral = new StringLiteral("string", "\"", ScanFlags.None);
+            //var variable = TerminalFactory.CreateCSharpIdentifier("variable");
+            //variable.AstConfig.NodeType = typeof(MyVariable);
+
+
+            // Not sure about how this is handled in 0.9 yet - I think it's handled by ToTerm().  Sean Kearon, March 2014.   variable.AddKeywords("set", "to", "if", "freight", "cost", "is", "loop", "through", "order");
+            // See https://irony.codeplex.com/discussions/361018 var number = new NumberLiteral("number", NumberOptions.Default, typeof());
+			var number = TerminalFactory.CreateCSharpNumber("number");
+            number.AstConfig.NodeType = typeof (MyNumber);
+            
+            var stringLiteral = new StringLiteral("string", "\"", StringOptions.None);
 
 			// remove uninteresting nodes from the AST (note: in current version of Irony,
 			// keywords added to the variable cannot be registered as punctuation).
-			this.RegisterPunctuation(";", "[", "]", "(", ")");
+			this.MarkPunctuation(";", "[", "]", "(", ")");
 
 			// specify the non-terminal which is the root of the AST
 			this.Root = program;
@@ -56,16 +65,16 @@ namespace FreightLanguageCompiler
 			statement.Rule = setVariable + ";" | ifStatement | orderLoop | expression + ";";
 
 			//<SetVariable> ::= "set" <Variable> "to" <Expression>
-			setVariable.Rule = Symbol("set") + variable + "to" + expression;
+			setVariable.Rule = ToTerm("set") + variable + "to" + expression;
 
 			//<IfStatement> ::= "if" <Expression> "[" <StatementList> "]"
-			ifStatement.Rule = Symbol("if") + expression + "[" + statementList + "]";
+			ifStatement.Rule = ToTerm("if") + expression + "[" + statementList + "]";
 
 			//<OrderLoop> ::= "loop" "through" "order" "[" <StatementList> "]"
-			orderLoop.Rule = Symbol("loop") + "through" + "order" + "[" + statementList + "]";
+			orderLoop.Rule = ToTerm("loop") + "through" + "order" + "[" + statementList + "]";
 
 			// <FreightDeclaration> ::= "freight" "cost" "is" <Expression> ";"
-			freightDeclaration.Rule = Symbol("freight") + "cost" + "is" + expression + ";";
+			freightDeclaration.Rule = ToTerm("freight") + "cost" + "is" + expression + ";";
 
 			//<Expression> ::= <number> | <variable> | <string>
 			//  | <Expression> <BinaryOperator> <Expression>
@@ -75,11 +84,36 @@ namespace FreightLanguageCompiler
 				| "(" + expression + ")";
 
 			//<BinaryOperator> ::= "+" | "-" | "*" | "/" | "<" | ">" | "<=" | ">=" | "is"
-			binaryOperator.Rule = Symbol("+") | "-" | "*" | "/" | "<" | ">" | "<=" | ">=" | "is";
+			binaryOperator.Rule = ToTerm("+") | "-" | "*" | "/" | "<" | ">" | "<=" | ">=" | "is";
+
+            // Fix up the shift-reduce conflicts by defining precedence rules.  Sean Kearon, March 2014.
+            RegisterOperators(10, "is", "+", "-");
+            RegisterOperators(20, "*", "/");
+            RegisterOperators(30, Associativity.Right, "**");
+            RegisterOperators(40, "<", ">", "<=", ">=");
+
+            LanguageFlags = LanguageFlags.NewLineBeforeEOF | LanguageFlags.CreateAst | LanguageFlags.SupportsBigInt;
+            
 
 			#endregion
 
 		}
 
 	}
+
+    public class MyVariable : IAstNodeInit
+    {
+        public void Init(AstContext context, ParseTreeNode parseNode)
+        {
+
+        }
+    }
+
+    public class MyNumber : IAstNodeInit
+    {
+        public void Init(AstContext context, ParseTreeNode parseNode)
+        {
+            
+        }
+    }
 }

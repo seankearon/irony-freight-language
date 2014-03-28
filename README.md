@@ -85,6 +85,8 @@ This has now changed and it seems you need to access these through the related `
 			builder.AppendLine("}");
 		}
 	}
+	
+Note also that I have changed the node classes' accessibility from `internal` to `public`.
  
 The other area that's changed is how you use the `Parser`.  Daniel's original `FLCompiler` looked like this:
 

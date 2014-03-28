@@ -149,4 +149,4 @@ This has now become:
 
 	}
 
-Lastly, I was getting an NRE when parsing the tree.  This was addressed with some very rapid assistance from the creator of Irony, [rivanstov](https://www.codeplex.com/site/users/view/rivantsov), who suggested deriving the `FLGrammar` from `InterpretedLanguageGrammar`.  Read more [here](https://irony.codeplex.com/discussions/361018).
+Lastly, I was getting an NRE when parsing the tree.  This was addressed with some very rapid assistance from the creator of Irony, [rivanstov](https://www.codeplex.com/site/users/view/rivantsov), who suggested deriving the `FLGrammar` from `InterpretedLanguageGrammar` - read more [here](https://irony.codeplex.com/discussions/361018).
